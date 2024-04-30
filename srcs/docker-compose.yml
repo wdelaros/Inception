@@ -1,4 +1,4 @@
-version: '2.20.3'
+version: '2.24'
 
 services:
   nginx:
@@ -6,4 +6,63 @@ services:
       context: ./requirements/nginx
       dockerfile: Dockerfile
     volumes:
-      - /home/wdelaros/data
+      - wordpress:/var/www/html
+    ports:
+      - 443:443
+    depends_on:
+      - mariadb
+      - wordpress
+    networks:
+      - inception
+    restart: unless-stopped
+
+  mariadb:
+      build:
+        context: ./requirements/mariadb
+        dockerfile: Dockerfile
+      env_file:
+        - .env
+      volumes:
+        - mariadb:/var/lib/mysql
+      ports:
+        - 3306:3306
+      networks:
+        - inception
+      restart: unless-stopped
+
+
+  wordpress:
+    build:
+      context: ./requirements/wordpress
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - wordpress:/var/www/html
+    ports:
+      - 9000:9000
+    depends_on:
+      - mariadb
+    networks:
+      - inception
+    restart: unless-stopped
+
+volumes:
+  mariadb:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/wdelaros/data/mariadb
+
+  wordpress:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/wdelaros/data/wordpress
+
+
+networks:
+  inception:
+    driver: bridge
