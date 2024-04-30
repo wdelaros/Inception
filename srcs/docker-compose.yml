@@ -1,4 +1,4 @@
-version: '2.24'
+version: '2.20.3'
 
 services:
   nginx:
@@ -14,7 +14,7 @@ services:
       - wordpress
     networks:
       - inception
-    restart: unless-stopped
+    restart: always
 
   mariadb:
       build:
@@ -28,7 +28,7 @@ services:
         - 3306:3306
       networks:
         - inception
-      restart: unless-stopped
+      restart: always
 
 
   wordpress:
@@ -45,7 +45,7 @@ services:
       - mariadb
     networks:
       - inception
-    restart: unless-stopped
+    restart: always
 
 volumes:
   mariadb:

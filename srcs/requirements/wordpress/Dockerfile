@@ -14,6 +14,6 @@ RUN chmod +x /script.sh
 
 EXPOSE 9000
 
-WORKDIR /var/www/html/wordpress
+WORKDIR /var/www/html
 
 ENTRYPOINT [ "/script.sh" ]
