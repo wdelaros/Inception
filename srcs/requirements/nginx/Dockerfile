@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM debian:oldstable
 
 RUN apt update -y && apt upgrade -y
 RUN apt install openssl -y

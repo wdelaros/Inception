@@ -1,5 +1,3 @@
-version: '2.20.3'
-
 services:
   nginx:
     build:
@@ -20,6 +18,9 @@ services:
       build:
         context: ./requirements/mariadb
         dockerfile: Dockerfile
+      environment:
+        MYSQL_PASSWORD_FILE: /run/secrets/db_password
+        MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       env_file:
         - .env
       volumes:
@@ -28,6 +29,9 @@ services:
         - 3306:3306
       networks:
         - inception
+      secrets:
+        - db_password
+        - db_root_password
       restart: always
 
 
@@ -35,6 +39,8 @@ services:
     build:
       context: ./requirements/wordpress
       dockerfile: Dockerfile
+    environment:
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password
     env_file:
       - .env
     volumes:
@@ -45,6 +51,8 @@ services:
       - mariadb
     networks:
       - inception
+    secrets:
+      - db_password
     restart: always
 
 volumes:
@@ -62,6 +70,11 @@ volumes:
       o: bind
       device: /home/wdelaros/data/wordpress
 
+secrets:
+  db_password:
+    file: ../secrets/db_password.txt
+  db_root_password:
+    file: ../secrets/db_root_password.txt
 
 networks:
   inception:

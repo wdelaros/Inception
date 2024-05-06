@@ -14,22 +14,22 @@ $(VOLUME_DIR):
 	mkdir -p $(VOLUME_DIR)
 
 build:
-	docker-compose -f ./srcs/docker-compose.yml build
+	docker compose -f ./srcs/docker-compose.yml build
 
 up:
 	@docker compose -f ./srcs/docker-compose.yml up
 
 down:
-	docker-compose -f ./srcs/docker-compose.yml down
+	docker compose -f ./srcs/docker-compose.yml down
 
 start:
-	docker-compose -f ./srcs/docker-compose.yml start
+	docker compose -f ./srcs/docker-compose.yml start
 
 stop:
-	docker-compose -f ./srcs/docker-compose.yml stop
+	docker compose -f ./srcs/docker-compose.yml stop
 
 logs:
-	docker-compose -f ./srcs/docker-compose.yml logs
+	docker compose -f ./srcs/docker-compose.yml logs
 
 nginx:
 	docker exec -it srcs-nginx-1 bash
