@@ -8,39 +8,17 @@ services:
     ports:
       - 443:443
     depends_on:
-      - mariadb
       - wordpress
     networks:
       - inception
     restart: always
 
-  mariadb:
-      build:
-        context: ./requirements/mariadb
-        dockerfile: Dockerfile
-      environment:
-        MYSQL_PASSWORD_FILE: /run/secrets/db_password
-        MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-      env_file:
-        - .env
-      volumes:
-        - mariadb:/var/lib/mysql
-      ports:
-        - 3306:3306
-      networks:
-        - inception
-      secrets:
-        - db_password
-        - db_root_password
-      restart: always
-
-
   wordpress:
     build:
       context: ./requirements/wordpress
       dockerfile: Dockerfile
-    environment:
-      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+    # environment:
+    #   MYSQL_PASSWORD_FILE: /run/secrets/db_password
     env_file:
       - .env
     volumes:
@@ -51,8 +29,28 @@ services:
       - mariadb
     networks:
       - inception
-    secrets:
-      - db_password
+    # secrets:
+    #   - db_password
+    restart: always
+
+  mariadb:
+    build:
+      context: ./requirements/mariadb
+      dockerfile: Dockerfile
+    # environment:
+    #   MYSQL_PASSWORD_FILE: /run/secrets/db_password
+    #   MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+    env_file:
+      - .env
+    volumes:
+      - mariadb:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      - inception
+    # secrets:
+    #   - db_password
+    #   - db_root_password
     restart: always
 
 volumes:
@@ -70,11 +68,11 @@ volumes:
       o: bind
       device: /home/wdelaros/data/wordpress
 
-secrets:
-  db_password:
-    file: ../secrets/db_password.txt
-  db_root_password:
-    file: ../secrets/db_root_password.txt
+# secrets:
+#   db_password:  
+#     file: ../secrets/db_password.txt
+#   db_root_password:
+#     file: ../secrets/db_root_password.txt
 
 networks:
   inception:

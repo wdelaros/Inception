@@ -31,11 +31,17 @@ stop:
 logs:
 	docker compose -f ./srcs/docker-compose.yml logs
 
-nginx:
-	docker exec -it srcs-nginx-1 bash
-
 ps:
 	docker ps
+
+db:
+	docker exec -it srcs-mariadb-1 bash
+
+wp:
+	docker exec -it srcs-wordpress-1 bash
+
+nginx:
+	docker exec -it srcs-nginx-1 bash
 
 clean:
 	sudo rm -rf $(WORDPRESS_DIR) $(MARIADB_DIR) $(VOLUME_DIR)

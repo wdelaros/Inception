@@ -1,9 +1,16 @@
 #!/bin/bash
 
-MYSQL_PASSWORD=$(cat $MYSQL_PASSWORD_FILE)
+# MYSQL_PASSWORD=$(cat $MYSQL_PASSWORD_FILE)
 
-service php7.4-fpm start
-service php7.4-fpm stop
+if [ ! -d /run/php ]; then
+	service php7.4-fpm start
+	service php7.4-fpm stop
+fi
+
+if [[ ${WP_ADMIN,,} == *"admin"* ]]; then
+	echo "Error: Invalid username"
+	exit
+fi
 
 if [ ! -f /var/www/html/wp-config.php ]; then
 	wp core download --allow-root --path=/var/www/html
@@ -12,6 +19,7 @@ if [ ! -f /var/www/html/wp-config.php ]; then
 	wp user create --allow-root "${WP_USER}" "${WP_USER_EMAIL}" --user_pass="${WP_USER_PASSWORD}" --role=author
 	/usr/sbin/php-fpm7.4 -F
 fi
+
 
 if [ -f /var/www/html/wp-config.php ]; then
 	/usr/sbin/php-fpm7.4 -F
