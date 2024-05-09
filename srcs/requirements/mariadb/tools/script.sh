@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# MYSQL_PASSWORD=$(cat $MYSQL_PASSWORD_FILE)
-# MYSQL_ROOT_PASSWORD=$(cat $MYSQL_ROOT_PASSWORD_FILE)
-
 chown -R mysql:mysql /var/lib/mysql
 
 mysql_install_db --datadir=/var/lib/mysql --user=mysql --skip-test-db >> /dev/null

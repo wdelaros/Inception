@@ -1,79 +1,63 @@
 services:
-  nginx:
-    build:
-      context: ./requirements/nginx
-      dockerfile: Dockerfile
-    volumes:
-      - wordpress:/var/www/html
-    ports:
-      - 443:443
-    depends_on:
-      - wordpress
-    networks:
-      - inception
-    restart: always
+    nginx:
+        build:
+            context: ./requirements/nginx
+            dockerfile: Dockerfile
+        volumes:
+            - wordpress:/var/www/html
+        ports:
+            - 443:443
+        depends_on:
+            - wordpress
+        networks:
+            - inception
+        restart: always
 
-  wordpress:
-    build:
-      context: ./requirements/wordpress
-      dockerfile: Dockerfile
-    # environment:
-    #   MYSQL_PASSWORD_FILE: /run/secrets/db_password
-    env_file:
-      - .env
-    volumes:
-      - wordpress:/var/www/html
-    ports:
-      - 9000:9000
-    depends_on:
-      - mariadb
-    networks:
-      - inception
-    # secrets:
-    #   - db_password
-    restart: always
+    wordpress:
+        build:
+            context: ./requirements/wordpress
+            dockerfile: Dockerfile
+        env_file:
+            - .env
+        volumes:
+            - wordpress:/var/www/html
+        ports:
+            - 9000:9000
+        depends_on:
+            - mariadb
+        networks:
+            - inception
+        restart: always
 
-  mariadb:
-    build:
-      context: ./requirements/mariadb
-      dockerfile: Dockerfile
-    # environment:
-    #   MYSQL_PASSWORD_FILE: /run/secrets/db_password
-    #   MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-    env_file:
-      - .env
-    volumes:
-      - mariadb:/var/lib/mysql
-    ports:
-      - 3306:3306
-    networks:
-      - inception
-    # secrets:
-    #   - db_password
-    #   - db_root_password
-    restart: always
+    mariadb:
+        build:
+            context: ./requirements/mariadb
+            dockerfile: Dockerfile
+        env_file:
+            - .env
+        volumes:
+            - mariadb:/var/lib/mysql
+        ports:
+            - 3306:3306
+        networks:
+            - inception
+        restart: always
 
 volumes:
-  mariadb:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /home/wdelaros/data/mariadb
+    mariadb:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: /home/wdelaros/data/mariadb
 
-  wordpress:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /home/wdelaros/data/wordpress
-
-# secrets:
-#   db_password:  
-#     file: ../secrets/db_password.txt
-#   db_root_password:
-#     file: ../secrets/db_root_password.txt
+    wordpress:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: /home/wdelaros/data/wordpress
 
 networks:
-  inception:
-    driver: bridge
+    inception:
+        driver: bridge

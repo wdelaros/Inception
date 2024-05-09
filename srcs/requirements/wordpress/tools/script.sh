@@ -8,7 +8,12 @@ if [ ! -d /run/php ]; then
 fi
 
 if [[ ${WP_ADMIN,,} == *"admin"* ]]; then
-	echo "Error: Invalid username"
+	echo "Error: Username can't contain 'admin'"
+	exit
+fi
+
+if [[ ${WP_PASSWORD,,} == *${WP_ADMIN,,}* ]]; then
+	echo "Error: Password can't contain the username"
 	exit
 fi
 
